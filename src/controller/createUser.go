@@ -11,16 +11,17 @@ import (
 )
 
 func CreateUser(c *gin.Context) {
-	logger.Info("Creating user",
-		zap.String("method", "CreateUser"),
+	logger.Info("Init CreateUser controller",
+		zap.String("journey", "createUser"),
 	)
 	var userRequest request.UserRequest
 
 	if err := c.ShouldBindJSON(&userRequest); err != nil {
-		logger.Error("Error while binding JSON", err)
-		restErr := validation.ValidateUserError(err)
+		logger.Error("Error trying to validate user info", err,
+			zap.String("journey", "createUser"))
+		errRest := validation.ValidateUserError(err)
 
-		c.JSON(restErr.Code, restErr)
+		c.JSON(errRest.Code, errRest)
 		return
 	}
 

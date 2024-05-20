@@ -12,15 +12,13 @@ import (
 	en_translation "github.com/go-playground/validator/v10/translations/en"
 )
 
-var (
-	transl ut.Translator
-)
+var transl ut.Translator
 
 func init() {
 	if val, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		en := en.New()
 		unt := ut.New(en, en)
-		transl, _ := unt.GetTranslator("en")
+		transl, _ = unt.GetTranslator("en")
 		en_translation.RegisterDefaultTranslations(val, transl)
 	}
 }
@@ -45,7 +43,7 @@ func ValidateUserError(
 			errorCauses = append(errorCauses, cause)
 		}
 
-		return rest_err.NewBadRequestValidationError("One or more fields are invalids", errorCauses)
+		return rest_err.NewBadRequestValidationError("One or more fields are invalid", errorCauses)
 	} else {
 		return rest_err.NewBadRequestError("Error trying to convert fields")
 	}
