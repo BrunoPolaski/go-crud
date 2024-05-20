@@ -12,11 +12,11 @@ type UserDomain struct {
 	Age      int8
 }
 
-func (ud *UserDomain) EncryptPassword() string {
+func (ud *UserDomain) EncryptPassword() (string, error) {
 	if hash, err := bcrypt.GenerateFromPassword([]byte(ud.Password), bcrypt.DefaultCost); err != nil {
-		panic(err)
+		return "", err
 	} else {
-		return string(hash)
+		return string(hash), nil
 	}
 }
 
