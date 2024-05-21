@@ -12,17 +12,27 @@ type UserDomain struct {
 	Age      int8
 }
 
-func (ud *UserDomain) EncryptPassword() (string, error) {
+func NewUserDomain(email, password, name string, age int8) UserDomainInterface {
+	return &UserDomain{
+		Email:    email,
+		Password: password,
+		Name:     name,
+		Age:      age,
+	}
+}
+
+func (ud *UserDomain) EncryptPassword() error {
 	if hash, err := bcrypt.GenerateFromPassword([]byte(ud.Password), bcrypt.DefaultCost); err != nil {
-		return "", err
+		return err
 	} else {
-		return string(hash), nil
+		ud.Password = string(hash)
+		return nil
 	}
 }
 
 type UserDomainInterface interface {
-	CreateUser(UserDomain) *rest_err.RestErr
-	UpdateUser(string, UserDomain) *rest_err.RestErr
+	CreateUser() *rest_err.RestErr
+	UpdateUser(string) *rest_err.RestErr
 	FindUser(string) (*UserDomain, *rest_err.RestErr)
 	DeleteUser(string) *rest_err.RestErr
 }

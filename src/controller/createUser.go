@@ -2,10 +2,12 @@ package controller
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/BrunoPolaski/go-crud/src/configuration/logger"
 	"github.com/BrunoPolaski/go-crud/src/configuration/validation"
 	"github.com/BrunoPolaski/go-crud/src/controller/model/request"
+	"github.com/BrunoPolaski/go-crud/src/model"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -25,7 +27,21 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	logger.Info(fmt.Sprintf("User created: %v", userRequest),
+	userDomain := model.NewUserDomain(
+		userRequest.Email,
+		userRequest.Password,
+		userRequest.Name,
+		userRequest.Age,
+	)
+
+	if err := userDomain.CreateUser(); err != nil {
+		c.JSON(err.Code, err)
+		return
+	}
+
+	logger.Info(fmt.Sprintf("User created: %v", userDomain),
 		zap.String("method", "CreateUser"),
 	)
+
+	c.String(http.StatusOK, "User created")
 }
