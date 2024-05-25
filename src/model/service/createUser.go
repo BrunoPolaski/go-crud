@@ -1,15 +1,18 @@
-package model
+package service
 
 import (
 	"github.com/BrunoPolaski/go-crud/src/configuration/logger"
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
+	"github.com/BrunoPolaski/go-crud/src/model"
 	"go.uber.org/zap"
 )
 
-func (ud *UserDomain) CreateUser() *rest_err.RestErr {
+func (ud *userDomainService) CreateUserService(
+	userDomain model.UserDomainInterface,
+) *rest_err.RestErr {
 	logger.Info("Init CreateUser model", zap.String("journey", "createUser"))
 
-	if err := ud.EncryptPassword(); err != nil {
+	if err := userDomain.EncryptPassword(); err != nil {
 		return rest_err.NewInternalServerError("Error trying to encrypt password")
 	}
 
