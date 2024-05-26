@@ -1,11 +1,30 @@
 package controller
 
-import "github.com/gin-gonic/gin"
+import (
+	"fmt"
 
-func FindUserById(c *gin.Context) {
+	"github.com/BrunoPolaski/go-crud/src/configuration/logger"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
+)
 
+func (uc *userController) FindUserById(c *gin.Context) {
+	logger.Info("Init FindUserById controller",
+		zap.String("journey", "findUserById"),
+	)
+
+	id := c.Param("id")
+
+	if user, err := uc.service.FindUserService(id); err != nil {
+		c.JSON(err.Code, err)
+		return
+	} else {
+		logger.Info(fmt.Sprintf("User found %v", user),
+			zap.String("method", "FindUserById"),
+		)
+	}
 }
 
-func FindUserByEmail(c *gin.Context) {
+func (uc *userController) FindUserByEmail(c *gin.Context) {
 
 }

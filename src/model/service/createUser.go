@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/BrunoPolaski/go-crud/src/configuration/logger"
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
 	"github.com/BrunoPolaski/go-crud/src/model"
@@ -15,6 +17,8 @@ func (ud *userDomainService) CreateUserService(
 	if err := userDomain.EncryptPassword(); err != nil {
 		return rest_err.NewInternalServerError("Error trying to encrypt password")
 	}
+
+	fmt.Println("UserDomain password: ", userDomain.GetPassword())
 
 	return nil
 }
