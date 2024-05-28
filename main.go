@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/BrunoPolaski/go-crud/src/configuration/database/mongodb"
 	"github.com/BrunoPolaski/go-crud/src/configuration/logger"
 	"github.com/BrunoPolaski/go-crud/src/controller"
 	"github.com/BrunoPolaski/go-crud/src/controller/routes"
@@ -25,8 +24,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	mongodb.InitDatabase()
-
+	//Init dependencies
 	service := service.NewUserDomainService()
 	controller := controller.NewUserController(service)
 
