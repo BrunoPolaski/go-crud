@@ -15,7 +15,7 @@ func (uc *userController) FindUserById(c *gin.Context) {
 
 	id := c.Param("id")
 
-	if user, err := uc.service.FindUserService(id); err != nil {
+	if user, err := uc.service.FindUser(id); err != nil {
 		c.JSON(err.Code, err)
 		return
 	} else {

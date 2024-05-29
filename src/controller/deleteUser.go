@@ -13,7 +13,7 @@ func (uc *userController) DeleteUser(c *gin.Context) {
 
 	id := c.Param("id")
 
-	if err := uc.service.DeleteUserService(id); err != nil {
+	if err := uc.service.DeleteUser(id); err != nil {
 		c.JSON(err.Code, err)
 		return
 	}

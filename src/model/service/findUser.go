@@ -5,6 +5,6 @@ import (
 	"github.com/BrunoPolaski/go-crud/src/model"
 )
 
-func (*userDomainService) FindUserService(string) (*model.UserDomainInterface, *rest_err.RestErr) {
+func (*userDomainService) FindUser(string) (*model.UserDomainInterface, *rest_err.RestErr) {
 	return nil, nil
 }

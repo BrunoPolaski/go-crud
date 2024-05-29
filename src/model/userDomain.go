@@ -4,15 +4,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type UserDomainInterface interface {
-	GetEmail() string
-	GetPassword() string
-	GetName() string
-	GetAge() int8
-	EncryptPassword() error
-}
-
 type userDomain struct {
+	id       string
 	email    string
 	password string
 	name     string
