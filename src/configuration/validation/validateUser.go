@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/BrunoPolaski/go-crud/src/configuration/restErr"
+	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/locales/en"
 	ut "github.com/go-playground/universal-translator"
@@ -25,17 +25,17 @@ func init() {
 
 func ValidateUserError(
 	validationError error,
-) *restErr.RestErr {
+) *rest_err.RestErr {
 	var jsonErr *json.UnmarshalTypeError
 	var jsonValidationError validator.ValidationErrors
 
 	if errors.As(validationError, &jsonErr) {
-		return restErr.NewBadRequestError("Invalid field type")
+		return rest_err.NewBadRequestError("Invalid field type")
 	} else if errors.As(validationError, &jsonValidationError) {
-		errorCauses := []restErr.Causes{}
+		errorCauses := []rest_err.Causes{}
 
 		for _, e := range validationError.(validator.ValidationErrors) {
-			cause := restErr.Causes{
+			cause := rest_err.Causes{
 				Message: e.Translate(transl),
 				Field:   e.Field(),
 			}
@@ -43,8 +43,8 @@ func ValidateUserError(
 			errorCauses = append(errorCauses, cause)
 		}
 
-		return restErr.NewBadRequestValidationError("One or more fields are invalid", errorCauses)
+		return rest_err.NewBadRequestValidationError("One or more fields are invalid", errorCauses)
 	} else {
-		return restErr.NewBadRequestError("Error trying to convert fields")
+		return rest_err.NewBadRequestError("Error trying to convert fields")
 	}
 }

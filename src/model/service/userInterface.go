@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/BrunoPolaski/go-crud/src/configuration/restErr"
+	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
 	"github.com/BrunoPolaski/go-crud/src/model"
 	"github.com/BrunoPolaski/go-crud/src/model/repository"
 )
@@ -19,8 +19,8 @@ func NewUserDomainService(
 }
 
 type UserDomainService interface {
-	CreateUser(model.UserDomainInterface) *restErr.RestErr
-	UpdateUser(model.UserDomainInterface, string) *restErr.RestErr
-	FindUser(string) (*model.UserDomainInterface, *restErr.RestErr)
-	DeleteUser(string) *restErr.RestErr
+	CreateUser(model.UserDomainInterface) *rest_err.RestErr
+	UpdateUser(model.UserDomainInterface, string) *rest_err.RestErr
+	FindUser(string) (*model.UserDomainInterface, *rest_err.RestErr)
+	DeleteUser(string) *rest_err.RestErr
 }

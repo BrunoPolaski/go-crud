@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/BrunoPolaski/go-crud/src/configuration/restErr"
+	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
 	"github.com/BrunoPolaski/go-crud/src/model"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -17,5 +17,5 @@ type userRepository struct {
 }
 
 type UserRepository interface {
-	CreateUser(userDomain model.UserDomainInterface) (model.UserDomainInterface, *restErr.RestErr)
+	CreateUser(userDomain model.UserDomainInterface) (model.UserDomainInterface, *rest_err.RestErr)
 }
