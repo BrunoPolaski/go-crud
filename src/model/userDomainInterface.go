@@ -6,6 +6,12 @@ type UserDomainInterface interface {
 	GetName() string
 	GetAge() int8
 	EncryptPassword() error
+	GetId() string
+	SetId(string)
+	SetEmail(string)
+	SetPassword(string)
+	SetName(string)
+	SetAge(int8)
 }
 
 func NewUserDomain(email, password, name string, age int8) UserDomainInterface {

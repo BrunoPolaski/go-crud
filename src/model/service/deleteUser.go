@@ -1,7 +1,7 @@
 package service
 
-import "github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
+import "github.com/BrunoPolaski/go-crud/src/configuration/restErr"
 
-func (*userDomainService) DeleteUser(string) *rest_err.RestErr {
+func (*userDomainService) DeleteUser(string) *restErr.RestErr {
 	return nil
 }

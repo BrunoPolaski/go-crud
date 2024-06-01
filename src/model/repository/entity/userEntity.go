@@ -1,6 +1,6 @@
 package entity
 
-type UserDomain struct {
+type UserEntity struct {
 	Id       string `bson:"_id,omitempty"`
 	Email    string `bson:"email"`
 	Password string `bson:"password"`
