@@ -6,8 +6,8 @@ type UserDomainInterface interface {
 	GetName() string
 	GetAge() int8
 	EncryptPassword() error
-	GetId() string
-	SetId(string)
+	GetID() string
+	SetID(string)
 	SetEmail(string)
 	SetPassword(string)
 	SetName(string)

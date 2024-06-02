@@ -9,6 +9,7 @@ import (
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
 	"github.com/BrunoPolaski/go-crud/src/model"
 	"github.com/BrunoPolaski/go-crud/src/model/repository/entity/converter"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 )
 
@@ -25,7 +26,7 @@ func (ur *userRepository) CreateUser(userDomain model.UserDomainInterface) (mode
 		return nil, rest_err.NewInternalServerError(fmt.Sprintf("Error creating user %v", err))
 	}
 
-	userDomain.SetId(result.InsertedID.(string))
+	entity.ID = result.InsertedID.(primitive.ObjectID)
 
-	return userDomain, nil
+	return converter.ConvertEntityToDomain(entity), nil
 }

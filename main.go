@@ -26,11 +26,13 @@ func main() {
 
 	userController := cmd.InitDependencies(database)
 
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 
 	routes.InitRoutes(userController, &router.RouterGroup)
 
-	if err := router.Run(":8080"); err != nil {
+	logger.Info("All set to Go!")
+	if err := router.Run(); err != nil {
 		log.Fatal(err)
 	}
 }
