@@ -7,7 +7,7 @@ import (
 	"github.com/BrunoPolaski/go-crud/src/configuration/logger"
 	"github.com/BrunoPolaski/go-crud/src/configuration/validation"
 	"github.com/BrunoPolaski/go-crud/src/controller/model/request"
-	"github.com/BrunoPolaski/go-crud/src/model"
+	model "github.com/BrunoPolaski/go-crud/src/model/user"
 	"github.com/BrunoPolaski/go-crud/src/view"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"

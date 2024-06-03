@@ -3,12 +3,11 @@ package repository
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/BrunoPolaski/go-crud/src/configuration/logger"
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
-	"github.com/BrunoPolaski/go-crud/src/model"
 	"github.com/BrunoPolaski/go-crud/src/model/repository/entity/converter"
+	model "github.com/BrunoPolaski/go-crud/src/model/user"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 )
@@ -16,7 +15,6 @@ import (
 func (ur *userRepository) CreateUser(userDomain model.UserDomainInterface) (model.UserDomainInterface, *rest_err.RestErr) {
 	logger.Info("Init CreateUser repository", zap.String("journey", "createUser"))
 
-	collectionName := os.Getenv("MONGO_USERS_DATABASE")
 	collection := ur.databaseConnection.Collection(collectionName)
 
 	entity := converter.ConvertDomainToEntity(userDomain)

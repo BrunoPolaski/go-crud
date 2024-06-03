@@ -2,7 +2,7 @@ package view
 
 import (
 	"github.com/BrunoPolaski/go-crud/src/controller/model/response"
-	"github.com/BrunoPolaski/go-crud/src/model"
+	model "github.com/BrunoPolaski/go-crud/src/model/user"
 )
 
 func ConvertDomainToResponse(

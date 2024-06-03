@@ -1,8 +1,8 @@
 package converter
 
 import (
-	"github.com/BrunoPolaski/go-crud/src/model"
 	"github.com/BrunoPolaski/go-crud/src/model/repository/entity"
+	model "github.com/BrunoPolaski/go-crud/src/model/user"
 )
 
 func ConvertDomainToEntity(domain model.UserDomainInterface) *entity.UserEntity {

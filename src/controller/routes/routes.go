@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/BrunoPolaski/go-crud/src/configuration/logger"
-	"github.com/BrunoPolaski/go-crud/src/controller"
+	controller "github.com/BrunoPolaski/go-crud/src/controller/user"
 	"github.com/gin-gonic/gin"
 )
 
