@@ -2,10 +2,13 @@ package controller
 
 import (
 	"fmt"
+	"net/mail"
 
 	"github.com/BrunoPolaski/go-crud/src/configuration/logger"
+	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
 	"github.com/BrunoPolaski/go-crud/src/view"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 )
 
@@ -14,20 +17,44 @@ func (uc *userController) FindUserById(c *gin.Context) {
 		zap.String("journey", "findUserById"),
 	)
 
-	id := c.Param("id")
+	id := c.Param("userId")
 
-	if user, err := uc.service.FindUser(id); err != nil {
+	if _, err := primitive.ObjectIDFromHex(id); err != nil {
+		logger.Error("Invalid user ID", err,
+			zap.String("journey", "findUserById"),
+		)
+		errorMessage := rest_err.NewBadRequestError(
+			"Invalid user ID",
+		)
+		c.JSON(errorMessage.Code, errorMessage)
+		return
+	}
+
+	if user, err := uc.service.FindUserByID(id); err != nil {
 		c.JSON(err.Code, err)
 		return
 	} else {
 		logger.Info(fmt.Sprintf("User found %v", user),
 			zap.String("method", "FindUserById"),
 		)
+
+		c.JSON(200, view.ConvertDomainToResponse(user))
 	}
 }
 
 func (uc *userController) FindUserByEmail(c *gin.Context) {
-	email := c.Param("email")
+	email := c.Param("userEmail")
+
+	if _, err := mail.ParseAddress(email); err != nil {
+		logger.Error("Invalid user email", err,
+			zap.String("journey", "findUserByEmail"),
+		)
+		errorMessage := rest_err.NewBadRequestError(
+			"Invalid user email",
+		)
+		c.JSON(errorMessage.Code, errorMessage)
+		return
+	}
 
 	if user, err := uc.service.FindUserByEmail(email); err != nil {
 		c.JSON(err.Code, err)
