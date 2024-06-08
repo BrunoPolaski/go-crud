@@ -3,12 +3,12 @@ package controller
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/BrunoPolaski/go-crud/src/configuration/logger"
 	"github.com/BrunoPolaski/go-crud/src/configuration/validation"
 	"github.com/BrunoPolaski/go-crud/src/controller/model/request"
 	model "github.com/BrunoPolaski/go-crud/src/model/user"
-	"github.com/BrunoPolaski/go-crud/src/view"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -17,9 +17,11 @@ func (uc *userController) UpdateUser(c *gin.Context) {
 	logger.Info("Init updateUser controller",
 		zap.String("journey", "updateUser"),
 	)
-	var userRequest request.UserRequest
+	var userUpdateRequest request.UserUpdateRequest
 
-	if err := c.ShouldBindJSON(&userRequest); err != nil {
+	id := c.Param("userId")
+
+	if err := c.ShouldBindJSON(&userUpdateRequest); err != nil || strings.TrimSpace(id) == "" {
 		logger.Error("Error trying to validate user info", err,
 			zap.String("journey", "updateUser"))
 		errRest := validation.ValidateUserError(err)
@@ -28,22 +30,20 @@ func (uc *userController) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	userDomain := model.NewUserDomain(
-		userRequest.Email,
-		userRequest.Password,
-		userRequest.Name,
-		userRequest.Age,
+	userDomain := model.NewUserUpdateDomain(
+		userUpdateRequest.Name,
+		userUpdateRequest.Age,
 	)
 
-	domainResponse, err := uc.service.CreateUser(userDomain)
+	err := uc.service.UpdateUser(userDomain, id)
 	if err != nil {
 		c.JSON(err.Code, err)
 		return
 	}
 
-	logger.Info(fmt.Sprintf("User updated: %v", domainResponse),
+	logger.Info(fmt.Sprintf("ID updated: %s", id),
 		zap.String("method", "UpdateUser"),
 	)
 
-	c.JSON(http.StatusOK, view.ConvertDomainToResponse(domainResponse))
+	c.Status(http.StatusOK)
 }
