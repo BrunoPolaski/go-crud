@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
-	"github.com/BrunoPolaski/go-crud/src/model/repository"
+	repository "github.com/BrunoPolaski/go-crud/src/model/repository/user"
 	model "github.com/BrunoPolaski/go-crud/src/model/user"
 )
 

@@ -16,9 +16,5 @@ func (ud *userDomainService) CreateUser(
 		return nil, rest_err.NewInternalServerError("Error trying to encrypt password")
 	}
 
-	if userDomainRepository, err := ud.repository.CreateUser(userDomain); err != nil {
-		return nil, err
-	} else {
-		return userDomainRepository, nil
-	}
+	return ud.repository.CreateUser(userDomain)
 }
