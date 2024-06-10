@@ -16,7 +16,7 @@ import (
 func (ur *userRepository) CreateUser(userDomain model.UserDomainInterface) (model.UserDomainInterface, *rest_err.RestErr) {
 	logger.Info("Init CreateUser repository", zap.String("journey", "createUser"))
 
-	collection := ur.databaseConnection.Collection(os.Getenv(MONGO_USERS_DATABASE))
+	collection := ur.databaseConnection.Collection(os.Getenv(MONGO_USERS_COLLECTION))
 
 	entity := converter.ConvertDomainToEntity(userDomain)
 

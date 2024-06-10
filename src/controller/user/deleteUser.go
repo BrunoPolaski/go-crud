@@ -25,14 +25,15 @@ func (uc *userController) DeleteUser(c *gin.Context) {
 		return
 	}
 
-	if err := uc.service.DeleteUser(id); err != nil {
+	err := uc.service.DeleteUser(id)
+	if err != nil {
 		c.JSON(err.Code, err)
 		return
-	} else {
-		c.Status(http.StatusOK)
 	}
 
 	logger.Info("User deleted",
 		zap.String("method", "DeleteUser"),
 	)
+
+	c.Status(http.StatusOK)
 }

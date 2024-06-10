@@ -9,17 +9,19 @@ import (
 	"github.com/BrunoPolaski/go-crud/src/model/repository/entity/converter"
 	model "github.com/BrunoPolaski/go-crud/src/model/user"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 )
 
 func (ur *userRepository) UpdateUserRepository(userDomain model.UserDomainInterface, id string) *rest_err.RestErr {
 	logger.Info("Init UpdateUserRepository repository", zap.String("journey", "updateUser"))
 
-	collection := ur.databaseConnection.Collection(os.Getenv(MONGO_USERS_DATABASE))
+	collection := ur.databaseConnection.Collection(os.Getenv(MONGO_USERS_COLLECTION))
 
 	entity := converter.ConvertDomainToEntity(userDomain)
 
-	filter := bson.D{{Key: "_id", Value: id}}
+	idHex, _ := primitive.ObjectIDFromHex(id)
+	filter := bson.D{{Key: "_id", Value: idHex}}
 
 	_, err := collection.UpdateOne(context.Background(), filter, bson.D{{Key: "$set", Value: entity}})
 	if err != nil {

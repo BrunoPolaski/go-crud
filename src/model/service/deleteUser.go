@@ -9,5 +9,12 @@ import (
 func (us *userDomainService) DeleteUser(id string) *rest_err.RestErr {
 	logger.Info("Init DeleteUser service", zap.String("journey", "DeleteUser"))
 
-	return us.repository.DeleteUserRepository(id)
+	err := us.repository.DeleteUserRepository(id)
+	if err != nil {
+		logger.Error("Error trying to call repository", err, zap.String("journey", "DeleteUser"))
+		return err
+	}
+
+	logger.Info("Successfully executed DeleteUser service", zap.String("journey", "DeleteUser"))
+	return nil
 }

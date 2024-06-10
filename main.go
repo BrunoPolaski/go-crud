@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 
+	"github.com/BrunoPolaski/go-crud/src/configuration"
 	"github.com/BrunoPolaski/go-crud/src/configuration/database/mongodb"
 	"github.com/BrunoPolaski/go-crud/src/configuration/logger"
 	"github.com/BrunoPolaski/go-crud/src/controller/routes"
@@ -23,7 +24,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	userController := InitDependencies(database)
+	userController := configuration.InitDependencies(database)
 
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
