@@ -14,7 +14,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (uc *userController) UpdateUser(c *gin.Context) {
+func (uc *userController) UpdateUserController(c *gin.Context) {
 	logger.Info("Init updateUser controller",
 		zap.String("journey", "updateUser"),
 	)
@@ -43,7 +43,7 @@ func (uc *userController) UpdateUser(c *gin.Context) {
 		userUpdateRequest.Age,
 	)
 
-	if err := uc.service.UpdateUser(userDomain, id); err != nil {
+	if err := uc.service.UpdateUserService(userDomain, id); err != nil {
 		c.JSON(err.Code, err)
 		return
 	} else {

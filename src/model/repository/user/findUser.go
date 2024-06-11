@@ -14,7 +14,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func (ur *userRepository) FindUserByID(id string) (model.UserDomainInterface, *rest_err.RestErr) {
+func (ur *userRepository) FindUserByIDRepository(id string) (model.UserDomainInterface, *rest_err.RestErr) {
 	logger.Info("Initiating FindUserByID repository")
 
 	collection := ur.databaseConnection.Collection(os.Getenv(MONGO_USERS_COLLECTION))
@@ -35,7 +35,7 @@ func (ur *userRepository) FindUserByID(id string) (model.UserDomainInterface, *r
 	return converter.ConvertEntityToDomain(entity), nil
 }
 
-func (ur *userRepository) FindUserByEmail(email string) (model.UserDomainInterface, *rest_err.RestErr) {
+func (ur *userRepository) FindUserByEmailRepository(email string) (model.UserDomainInterface, *rest_err.RestErr) {
 	logger.Info("Initiating FindUserByEmail repository")
 
 	collection := ur.databaseConnection.Collection(os.Getenv(MONGO_USERS_COLLECTION))

@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"net/http"
 	"net/mail"
 
 	"github.com/BrunoPolaski/go-crud/src/configuration/logger"
@@ -12,7 +13,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (uc *userController) FindUserById(c *gin.Context) {
+func (uc *userController) FindUserByIdController(c *gin.Context) {
 	logger.Info("Init FindUserById controller",
 		zap.String("journey", "findUserById"),
 	)
@@ -30,7 +31,7 @@ func (uc *userController) FindUserById(c *gin.Context) {
 		return
 	}
 
-	if user, err := uc.service.FindUserByID(id); err != nil {
+	if user, err := uc.service.FindUserByIDService(id); err != nil {
 		c.JSON(err.Code, err)
 		return
 	} else {
@@ -42,7 +43,7 @@ func (uc *userController) FindUserById(c *gin.Context) {
 	}
 }
 
-func (uc *userController) FindUserByEmail(c *gin.Context) {
+func (uc *userController) FindUserByEmailController(c *gin.Context) {
 	email := c.Param("userEmail")
 
 	if _, err := mail.ParseAddress(email); err != nil {
@@ -56,7 +57,7 @@ func (uc *userController) FindUserByEmail(c *gin.Context) {
 		return
 	}
 
-	if user, err := uc.service.FindUserByEmail(email); err != nil {
+	if user, err := uc.service.FindUserByEmailService(email); err != nil {
 		c.JSON(err.Code, err)
 		return
 	} else {
@@ -64,6 +65,6 @@ func (uc *userController) FindUserByEmail(c *gin.Context) {
 			zap.String("method", "FindUserByEmail"),
 		)
 
-		c.JSON(200, view.ConvertDomainToResponse(user))
+		c.JSON(http.StatusFound, view.ConvertDomainToResponse(user))
 	}
 }

@@ -10,7 +10,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (uc *userController) DeleteUser(c *gin.Context) {
+func (uc *userController) DeleteUserController(c *gin.Context) {
 	logger.Info("Init DeleteUser controller",
 		zap.String("journey", "deleteUser"),
 	)
@@ -25,7 +25,7 @@ func (uc *userController) DeleteUser(c *gin.Context) {
 		return
 	}
 
-	err := uc.service.DeleteUser(id)
+	err := uc.service.DeleteUserService(id)
 	if err != nil {
 		c.JSON(err.Code, err)
 		return
@@ -35,5 +35,5 @@ func (uc *userController) DeleteUser(c *gin.Context) {
 		zap.String("method", "DeleteUser"),
 	)
 
-	c.Status(http.StatusOK)
+	c.Status(http.StatusNoContent)
 }

@@ -7,14 +7,19 @@ import (
 	"go.uber.org/zap"
 )
 
-func (ud *userDomainService) CreateUser(
+func (ud *userDomainService) CreateUserService(
 	userDomain model.UserDomainInterface,
 ) (model.UserDomainInterface, *rest_err.RestErr) {
 	logger.Info("Init CreateUser service", zap.String("journey", "createUser"))
+
+	if userDomain, _ := ud.repository.FindUserByEmailRepository(userDomain.GetEmail()); userDomain != nil {
+		logger.Info("User already exists", zap.String("journey", "createUser"))
+		return nil, rest_err.NewBadRequestError("User already exists")
+	}
 
 	if err := userDomain.EncryptPassword(); err != nil {
 		return nil, rest_err.NewInternalServerError("Error trying to encrypt password")
 	}
 
-	return ud.repository.CreateUser(userDomain)
+	return ud.repository.CreateUserRepository(userDomain)
 }

@@ -11,9 +11,9 @@ func InitRoutes(
 	r *gin.RouterGroup,
 ) {
 	logger.Info("Setting up routes")
-	r.GET("/getUserById/:userId", controller.FindUserById)
-	r.GET("/getUserByEmail/:userEmail", controller.FindUserByEmail)
-	r.POST("/createUser", controller.CreateUser)
-	r.PUT("/updateUser/:userId", controller.UpdateUser)
-	r.DELETE("/deleteUser/:userId", controller.DeleteUser)
+	r.GET("/getUserById/:userId", controller.FindUserByIdController)
+	r.GET("/getUserByEmail/:userEmail", controller.FindUserByEmailController)
+	r.POST("/createUser", controller.CreateUserController)
+	r.PUT("/updateUser/:userId", controller.UpdateUserController)
+	r.DELETE("/deleteUser/:userId", controller.DeleteUserController)
 }
