@@ -4,8 +4,10 @@ import (
 	"net/http"
 
 	"github.com/BrunoPolaski/go-crud/src/configuration/logger"
-	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
+	"github.com/BrunoPolaski/go-crud/src/configuration/validation"
 	"github.com/BrunoPolaski/go-crud/src/controller/model/request"
+	model "github.com/BrunoPolaski/go-crud/src/model/user"
+	"github.com/BrunoPolaski/go-crud/src/view"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -17,15 +19,26 @@ func (uc *userController) LoginUserController(c *gin.Context) {
 		logger.Error("Invalid JSON body", err,
 			zap.String("journey", "loginUser"),
 		)
-		errorMessage := rest_err.NewBadRequestError(
-			"Invalid JSON body")
+		errorMessage := validation.ValidateUserError(err)
 		c.JSON(errorMessage.Code, errorMessage)
+		return
 	}
 
-	if err := uc.service.LoginUserService(userLogin); err != nil {
+	userRequest := model.NewUserLoginDomain(
+		userLogin.Email,
+		userLogin.Password,
+	)
+
+	domain, err := uc.service.LoginUserService(userRequest)
+	if err != nil {
 		c.JSON(err.Code, err)
 		return
 	}
 
-	c.Status(http.StatusOK)
+	logger.Info("Successfully executed LoginUserController",
+		zap.String("ID: ", domain.GetID()),
+		zap.String("journey", "loginUser"),
+	)
+
+	c.JSON(http.StatusOK, view.ConvertDomainToResponse(domain))
 }

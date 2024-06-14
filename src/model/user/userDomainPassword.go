@@ -10,3 +10,11 @@ func (ud *userDomain) EncryptPassword() error {
 		return nil
 	}
 }
+
+func (ud *userDomain) ComparePassword(password string) error {
+	if err := bcrypt.CompareHashAndPassword([]byte(ud.password), []byte(password)); err != nil {
+		return err
+	} else {
+		return nil
+	}
+}
