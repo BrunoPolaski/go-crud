@@ -1,12 +1,15 @@
 package model
 
+import "github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
+
 type UserDomainInterface interface {
+	ComparePassword(password string) error
+	EncryptPassword() error
+	GenerateToken() (string, *rest_err.RestErr)
 	GetEmail() string
 	GetPassword() string
 	GetName() string
 	GetAge() int8
-	EncryptPassword() error
-	ComparePassword(password string) error
 	GetID() string
 	SetID(string)
 	SetEmail(string)
