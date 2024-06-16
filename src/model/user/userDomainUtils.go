@@ -48,11 +48,35 @@ func (ud *userDomain) GenerateToken() (string, *rest_err.RestErr) {
 	return tokenWithSecret, nil
 }
 
-func VerifyToken(token string) (UserDomainInterface, *rest_err.RestErr)
-
-func (ud *userDomain) RemoveBearerPrefix(token string) string {
+func RemoveBearerPrefix(token string) string {
 	if strings.HasPrefix(token, "Bearer ") {
 		token = strings.TrimPrefix(token, "Bearer ")
 	}
 	return token
+}
+
+func VerifyToken(tokenValue string) (UserDomainInterface, *rest_err.RestErr) {
+	secret := os.Getenv("JWT_SECRET")
+	token, err := jwt.Parse(RemoveBearerPrefix(tokenValue), func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); ok {
+			return []byte(secret), nil
+		}
+		return nil, rest_err.NewBadRequestError("invalid token")
+	})
+
+	if err != nil {
+		return nil, rest_err.NewUnauthorizedError("invalid token")
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok || !token.Valid {
+		return nil, rest_err.NewUnauthorizedError("invalid token")
+	}
+
+	return &userDomain{
+		id:    claims["id"].(string),
+		email: claims["email"].(string),
+		name:  claims["name"].(string),
+		age:   int8(claims["age"].(float64)),
+	}, nil
 }
