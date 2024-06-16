@@ -7,7 +7,6 @@ import (
 
 	"github.com/BrunoPolaski/go-crud/src/configuration/logger"
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
-	model "github.com/BrunoPolaski/go-crud/src/model/user"
 	"github.com/BrunoPolaski/go-crud/src/view"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -46,13 +45,6 @@ func (uc *userController) FindUserByIdController(c *gin.Context) {
 
 func (uc *userController) FindUserByEmailController(c *gin.Context) {
 	email := c.Param("userEmail")
-
-	_, err := model.VerifyToken(c.Request.Header.Get("Authorization"))
-	if err != nil {
-		logger.Error("Bearer not valid", err)
-		c.JSON(err.Code, err)
-		return
-	}
 
 	if _, err := mail.ParseAddress(email); err != nil {
 		logger.Error("Invalid user email", err,
