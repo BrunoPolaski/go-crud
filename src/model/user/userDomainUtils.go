@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
-	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -54,29 +53,4 @@ func RemoveBearerPrefix(token string) string {
 		token = strings.TrimPrefix(token, "Bearer ")
 	}
 	return token
-}
-
-func VerifyTokenMiddleware(c *gin.Context) {
-	secret := os.Getenv("JWT_SECRET")
-	tokenValue := RemoveBearerPrefix(c.Request.Header.Get("Authorization"))
-	token, err := jwt.Parse(tokenValue, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); ok {
-			return []byte(secret), nil
-		}
-		return nil, rest_err.NewBadRequestError("invalid token")
-	})
-
-	if err != nil {
-		errRest := rest_err.NewBadRequestError("invalid token")
-		c.JSON(errRest.Code, errRest)
-		return
-	}
-
-	_, ok := token.Claims.(jwt.MapClaims)
-	if !ok || !token.Valid {
-		errRest := rest_err.NewUnauthorizedError("invalid token")
-		c.JSON(errRest.Code, errRest)
-		return
-	}
-
 }
