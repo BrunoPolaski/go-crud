@@ -13,35 +13,38 @@ import (
 
 func TestUserRepository_CreateUser(t *testing.T) {
 	databaseName := "user_database_test"
-	collection := "user_collection_test"
+	collectionName := "user_collection_test"
 
-	os.Setenv("MONGO_USERS_COLLECTION", collection)
+	err := os.Setenv("MONGODB_USER_DB", collectionName)
+	if err != nil {
+		t.FailNow()
+		return
+	}
+	defer os.Clearenv()
 
-	mtestDB := mtest.New(t, mtest.NewOptions().ClientType(mtest.Mock))
+	mt := mtest.New(t, mtest.NewOptions().ClientType(mtest.Mock))
+	defer mt.ClearCollections()
 
-	mtestDB.Run("when_sending_valid_domain_shall_return_success", func(mt *mtest.T) {
+	mt.Run("when_sending_a_valid_domain_returns_success", func(mt *mtest.T) {
 		mt.AddMockResponses(bson.D{
-			{Key: "ok", Value: "1"},
+			{Key: "ok", Value: 1},
 			{Key: "n", Value: 1},
 			{Key: "acknowledged", Value: true},
 		})
 		databaseMock := mt.Client.Database(databaseName)
 
 		repo := NewUserRepository(databaseMock)
-		userDomain, err := repo.CreateUserRepository(model.NewUserDomain(
-			"test@test.com",
-			"test",
-			"test",
-			90,
-		))
+		domain := model.NewUserDomain(
+			"test@test.com", "test", "test", 90)
+		userDomain, err := repo.CreateUserRepository(domain)
 
-		_, idErr := primitive.ObjectIDFromHex(userDomain.GetID())
+		_, errId := primitive.ObjectIDFromHex(userDomain.GetID())
 
 		assert.Nil(t, err)
-		assert.Nil(t, idErr)
-		assert.EqualValues(t, userDomain.GetEmail(), "test@test.com")
+		assert.Nil(t, errId)
+		assert.EqualValues(t, userDomain.GetEmail(), domain.GetEmail())
+		assert.EqualValues(t, userDomain.GetName(), domain.GetName())
+		assert.EqualValues(t, userDomain.GetAge(), domain.GetAge())
+		assert.EqualValues(t, userDomain.GetPassword(), domain.GetPassword())
 	})
-
-	defer mtestDB.Cleanup(mtestDB.ClearCollections)
-	defer os.Clearenv()
 }
