@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/integration/mtest"
 )
 
-func TestUserRepository_CreateUser(t *testing.T) {
+func TestUserRepository_UpdateUser(t *testing.T) {
 	databaseName := "user_database_test"
 	collectionName := "user_collection_test"
 
@@ -46,21 +46,5 @@ func TestUserRepository_CreateUser(t *testing.T) {
 		assert.EqualValues(t, userDomain.GetName(), domain.GetName())
 		assert.EqualValues(t, userDomain.GetAge(), domain.GetAge())
 		assert.EqualValues(t, userDomain.GetPassword(), domain.GetPassword())
-	})
-
-	mt.Run("shall_return_error_when_sending_invalid_domain", func(mt *mtest.T) {
-		mt.AddMockResponses(bson.D{
-			{Key: "ok", Value: 0},
-		})
-
-		databaseMock := mt.Client.Database(databaseName)
-
-		repo := NewUserRepository(databaseMock)
-		domain := model.NewUserDomain(
-			"test@test.com", "test", "test", 90)
-		userDomain, err := repo.CreateUserRepository(domain)
-
-		assert.NotNil(t, err)
-		assert.Nil(t, userDomain)
 	})
 }
