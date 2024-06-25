@@ -1,10 +1,11 @@
 package repository
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
-	model "github.com/BrunoPolaski/go-crud/src/model/user"
+	"github.com/BrunoPolaski/go-crud/src/model/repository/entity"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -26,25 +27,38 @@ func TestUserRepository_FindUserByEmail(t *testing.T) {
 	defer mt.ClearCollections()
 
 	mt.Run("shall_return_user_when_sending_valid_email", func(mt *mtest.T) {
-		mt.AddMockResponses(bson.D{
-			{Key: "ok", Value: 1},
-			{Key: "n", Value: 1},
-			{Key: "acknowledged", Value: true},
-		})
+		userEntity := entity.UserEntity{
+			ID:       primitive.NewObjectID(),
+			Email:    "test@test.com",
+			Password: "#Bruno33",
+			Name:     "Bruno",
+			Age:      18,
+		}
+
+		mt.AddMockResponses(mtest.CreateCursorResponse(
+			1, fmt.Sprintf("%s.%s", databaseName, collectionName),
+			mtest.FirstBatch,
+			convertEntityToBson(userEntity),
+		))
+
 		databaseMock := mt.Client.Database(databaseName)
 
 		repo := NewUserRepository(databaseMock)
-		domain := model.NewUserDomain(
-			"test@test.com", "test", "test", 90)
-		userDomain, err := repo.CreateUserRepository(domain)
+		userDomain, err := repo.FindUserByEmailRepository(userEntity.Email)
 
 		_, errId := primitive.ObjectIDFromHex(userDomain.GetID())
 
 		assert.Nil(t, err)
 		assert.Nil(t, errId)
-		assert.EqualValues(t, userDomain.GetEmail(), domain.GetEmail())
-		assert.EqualValues(t, userDomain.GetName(), domain.GetName())
-		assert.EqualValues(t, userDomain.GetAge(), domain.GetAge())
-		assert.EqualValues(t, userDomain.GetPassword(), domain.GetPassword())
 	})
+}
+
+func convertEntityToBson(userEntity entity.UserEntity) bson.D {
+	return bson.D{
+		{Key: "_id", Value: userEntity.ID},
+		{Key: "email", Value: userEntity.Email},
+		{Key: "password", Value: userEntity.Password},
+		{Key: "name", Value: userEntity.Name},
+		{Key: "age", Value: userEntity.Age},
+	}
 }
