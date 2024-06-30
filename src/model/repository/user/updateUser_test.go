@@ -25,7 +25,7 @@ func TestUserRepository_UpdateUser(t *testing.T) {
 	mt := mtest.New(t, mtest.NewOptions().ClientType(mtest.Mock))
 	defer mt.ClearCollections()
 
-	mt.Run("when_sending_a_valid_domain_returns_success", func(mt *mtest.T) {
+	mt.Run("shall_return_success_when_sending_a_valid_domain", func(mt *mtest.T) {
 		mt.AddMockResponses(bson.D{
 			{Key: "ok", Value: 1},
 			{Key: "n", Value: 1},
@@ -36,15 +36,22 @@ func TestUserRepository_UpdateUser(t *testing.T) {
 		repo := NewUserRepository(databaseMock)
 		domain := model.NewUserDomain(
 			"test@test.com", "test", "test", 90)
-		userDomain, err := repo.CreateUserRepository(domain)
-
-		_, errId := primitive.ObjectIDFromHex(userDomain.GetID())
+		err := repo.UpdateUserRepository(domain, primitive.NewObjectID().Hex())
 
 		assert.Nil(t, err)
-		assert.Nil(t, errId)
-		assert.EqualValues(t, userDomain.GetEmail(), domain.GetEmail())
-		assert.EqualValues(t, userDomain.GetName(), domain.GetName())
-		assert.EqualValues(t, userDomain.GetAge(), domain.GetAge())
-		assert.EqualValues(t, userDomain.GetPassword(), domain.GetPassword())
+	})
+
+	mt.Run("shall__return_error_when_database_returns_error", func(mt *mtest.T) {
+		mt.AddMockResponses(bson.D{
+			{Key: "ok", Value: 0},
+		})
+		databaseMock := mt.Client.Database(databaseName)
+
+		repo := NewUserRepository(databaseMock)
+		domain := model.NewUserDomain(
+			"test@test.com", "test", "test", 90)
+		err := repo.UpdateUserRepository(domain, primitive.NewObjectID().Hex())
+
+		assert.NotNil(t, err)
 	})
 }
