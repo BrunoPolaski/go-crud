@@ -1,6 +1,6 @@
-# GoLang CRUD project 
+# GoLang API Rest
 
-A users Rest API using Go, along with a login that verifies the user credentials.
+A users Rest API using Go with the MVC architectural pattern, along with a login that verifies the user credentials.
 The create user method encrypts with jwt before saving in MongoDB, then the user is able to login.
 
 ### Main tools
