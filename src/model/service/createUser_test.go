@@ -23,12 +23,6 @@ func TestUserService_CreateUser(t *testing.T) {
 			nil,
 			rest_err.NewNotFoundError("User not found"),
 		)
-		repository.EXPECT().CreateUserRepository(userMock).Return(
-			userMock,
-			nil,
-		)
-
-		_, err := service.FindUserByEmailService(userMock.GetEmail())
 
 		response, err := service.CreateUserService(userMock)
 
