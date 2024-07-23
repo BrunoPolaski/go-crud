@@ -1,26 +1,44 @@
 version: "3"
 services:
+  
   go-crud:
     build:
       context: .
       dockerfile: Dockerfile
     environment:
-      MONGO_URL: mongodb://mongodb:27017
-      MONGO_USERS_DATABASE: users
-      JWT_SECRET: secrettt
-      MONGO_USERS_COLLECTION: users
+      MONGO_URL: ${MONGO_URL}
+      MONGO_USERS_DATABASE: ${MONGO_USERS_DATABASE}
+      JWT_SECRET: ${JWT_SECRET}
+      MONGO_USERS_COLLECTION: ${MONGO_USERS_COLLECTION}
     ports:
       - "8080:8080"
     depends_on:
      - mongodb
     networks:
      - gocrud_network
+
   mongodb:
     image: mongo
     ports:
      - "27017:27017"
     networks:
      - gocrud_network
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: 123456
+    networks:
+      - gocrud_network
 
 networks:
   gocrud_network:
+    driver: bridge
