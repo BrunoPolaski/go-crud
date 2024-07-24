@@ -20,15 +20,50 @@ The create user method encrypts with jwt before saving in MongoDB, then the user
 
 ![Build status](https://github.com/BrunoPolaski/go-crud/actions/workflows/build.yml/badge.svg)
 
-### Running && testing
+### Initializing without Docker
 
-You can run the project using
+If you don't have docker installed, you can install Mongo and MongoExpress, create a collection and start to use it by running the application with:
 
 ```bash
+go mod download
 go run main.go
 ```
 
-Or, if you want to test it, use
+### Initializing with Docker
+
+To start the app, mongo and mongo-express, make sure you have docker installed and simply run in the terminal:
+
+```bash
+docker compose up
+```
+
+And you will be ready to go!
+
+After this, you can create a user with:
+
+```bash
+curl --json '{
+	"email": "test@gmail.com",
+	"name": "John",
+	"age": 22,
+	"password": "Chewbacca@777"
+}' localhost:8080/createUser
+```
+
+And log in the server with:
+
+```bash
+curl --json '{
+	"email": "test@gmail.com",
+	"name": "John",
+	"age": 22,
+	"password": "Chewbacca@777"
+}' localhost:8080/login
+```
+
+### Testing
+
+To test the app, you must run the following command in the terminal:
 
 ```bash
 go test -v ./...
