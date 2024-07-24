@@ -16,28 +16,54 @@ The create user method encrypts with jwt before saving in MongoDB, then the user
 - Gomock
 - Zap
 
-<div>
-
 ### Status
 
-![Build status](https://github.com/BrunoPolaski/go-crud/actions/workflows/go.yml/badge.svg)
-![Issues](https://img.shields.io/github/issues-raw/BrunoPolaski/go-crud)
-![Issues closed](https://img.shields.io/github/issues-closed-raw/BrunoPolaski/go-crud)
-![Pull requests](https://img.shields.io/github/issues-pr/BrunoPolaski/go-crud)
-![Repository size](https://img.shields.io/github/repo-size/BrunoPolaski/go-crud)
-![Code size](https://img.shields.io/github/languages/code-size/BrunoPolaski/go-crud)
-  
-<div>
+![Build status](https://github.com/BrunoPolaski/go-crud/actions/workflows/build.yml/badge.svg)
 
-### Running && testing
+### Initializing without Docker
 
-You can run the project using
+If you don't have docker installed, you can install Mongo and MongoExpress, create a collection and start to use it by running the application with:
 
 ```bash
+go mod download
 go run main.go
 ```
 
-Or, if you want to test it, use
+### Initializing with Docker
+
+To start the app, mongo and mongo-express, make sure you have docker installed and simply run in the terminal:
+
+```bash
+docker compose up
+```
+
+And you will be ready to go!
+
+After this, you can create a user with:
+
+```bash
+curl --json '{
+	"email": "test@gmail.com",
+	"name": "John",
+	"age": 22,
+	"password": "Chewbacca@777"
+}' localhost:8080/createUser
+```
+
+And log in the server with:
+
+```bash
+curl --json '{
+	"email": "test@gmail.com",
+	"name": "John",
+	"age": 22,
+	"password": "Chewbacca@777"
+}' localhost:8080/login
+```
+
+### Testing
+
+To test the app, you must run the following command in the terminal:
 
 ```bash
 go test -v ./...
