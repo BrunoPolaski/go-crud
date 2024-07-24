@@ -16,18 +16,9 @@ The create user method encrypts with jwt before saving in MongoDB, then the user
 - Gomock
 - Zap
 
-<div>
-
 ### Status
 
-![Build status](https://github.com/BrunoPolaski/go-crud/actions/workflows/go.yml/badge.svg)
-![Issues](https://img.shields.io/github/issues-raw/BrunoPolaski/go-crud)
-![Issues closed](https://img.shields.io/github/issues-closed-raw/BrunoPolaski/go-crud)
-![Pull requests](https://img.shields.io/github/issues-pr/BrunoPolaski/go-crud)
-![Repository size](https://img.shields.io/github/repo-size/BrunoPolaski/go-crud)
-![Code size](https://img.shields.io/github/languages/code-size/BrunoPolaski/go-crud)
-  
-<div>
+![Build status](https://github.com/BrunoPolaski/go-crud/actions/workflows/build.yml/badge.svg)
 
 ### Running && testing
 
