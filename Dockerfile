@@ -1,27 +1,43 @@
+# Stage 1: Build the Go application
 FROM golang:1.22 AS builder
 
+# Set the working directory inside the container
 WORKDIR /app
 
+# Copy Go modules manifests
 COPY go.mod go.sum ./
 
+# Download dependencies, if go.sum is present it verifies checksums
 RUN go mod download
 
-COPY . .
+# Copy the source code
+COPY src src
+COPY main.go main.go
 
-COPY .env .env
+# Build the Go application
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o go-crud .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+# Stage 2: Create a lightweight runtime container
+FROM golang:1.22-alpine AS runner
 
-FROM alpine:latest
+# Add a non-root user
+RUN adduser -D bruneco
 
-RUN apk --no-cache add ca-certificates
+# Copy the built binary from the builder stage
+COPY --from=builder /app/go-crud /app/go-crud
 
-WORKDIR /root/
+# Change ownership and permissions
+RUN chown -R bruneco:bruneco /app
+RUN chmod +x /app/go-crud
 
-COPY --from=builder /app/main ./
+# Set the working directory
+WORKDIR /app
 
-RUN chmod +x main
-
+# Expose the application port
 EXPOSE 8080
 
-CMD ["./main"]
+# Switch to the non-root user
+USER bruneco
+
+# Command to run the application
+CMD ["./go-crud"]

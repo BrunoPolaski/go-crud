@@ -15,7 +15,7 @@ func InitRoutes(
 	r.GET("/getUserById/:userId", middlewares.VerifyTokenMiddleware, controller.FindUserByIdController)
 	r.GET("/getUserByEmail/:userEmail", middlewares.VerifyTokenMiddleware, controller.FindUserByEmailController)
 
-	r.POST("/createUser", middlewares.VerifyTokenMiddleware, controller.CreateUserController)
+	r.POST("/createUser", controller.CreateUserController)
 	r.PUT("/updateUser/:userId", middlewares.VerifyTokenMiddleware, controller.UpdateUserController)
 	r.DELETE("/deleteUser/:userId", middlewares.VerifyTokenMiddleware, controller.DeleteUserController)
 	r.POST("/login", controller.LoginUserController)
