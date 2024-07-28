@@ -12,11 +12,11 @@ import (
 func TestUserService_DeleteUser(t *testing.T) {
 	ctrl := gomock.NewController(t)
 
-	repository := mocks.NewMockUserRepository(ctrl)
-	service := NewUserDomainService(repository)
+	mockRepository := mocks.NewMockUserRepository(ctrl)
+	service := NewUserDomainService(mockRepository)
 
 	t.Run("shall_return_success_when_user_deleted", func(t *testing.T) {
-		repository.EXPECT().DeleteUserRepository("1").Return(
+		mockRepository.EXPECT().DeleteUserRepository("1").Return(
 			nil,
 		)
 
@@ -26,7 +26,7 @@ func TestUserService_DeleteUser(t *testing.T) {
 	})
 
 	t.Run("shall_return_error_when_internal_error", func(t *testing.T) {
-		repository.EXPECT().DeleteUserRepository("1").Return(
+		mockRepository.EXPECT().DeleteUserRepository("1").Return(
 			rest_err.NewInternalServerError("Error trying to delete user"),
 		)
 

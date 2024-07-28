@@ -12,15 +12,15 @@ import (
 
 func TestUserService_UpdateUser(t *testing.T) {
 	ctrl := gomock.NewController(t)
-	repository := mocks.NewMockUserRepository(ctrl)
-	service := NewUserDomainService(repository)
+	mockRepository := mocks.NewMockUserRepository(ctrl)
+	service := NewUserDomainService(mockRepository)
 
 	t.Run("shall_return_success_when_payload_is_correct", func(t *testing.T) {
 		userDomain := mocks.UserMock
 
 		id := primitive.NewObjectID().Hex()
 
-		repository.EXPECT().UpdateUserRepository(userDomain, id).Return(
+		mockRepository.EXPECT().UpdateUserRepository(userDomain, id).Return(
 			nil,
 		)
 
@@ -34,7 +34,7 @@ func TestUserService_UpdateUser(t *testing.T) {
 
 		id := primitive.NewObjectID().Hex()
 
-		repository.EXPECT().UpdateUserRepository(userDomain, id).Return(
+		mockRepository.EXPECT().UpdateUserRepository(userDomain, id).Return(
 			rest_err.NewInternalServerError("Error updating user"),
 		)
 

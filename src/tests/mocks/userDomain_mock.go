@@ -14,7 +14,16 @@ import (
 
 	rest_err "github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
 	gomock "github.com/golang/mock/gomock"
+	model "github.com/BrunoPolaski/go-crud/src/model/user"
 )
+
+var UserMock model.UserDomainInterface = model.NewUserDomain(
+	"test@test.com",
+	"test",
+	"bruno",
+	19,
+)
+
 
 // MockUserDomainInterface is a mock of UserDomainInterface interface.
 type MockUserDomainInterface struct {

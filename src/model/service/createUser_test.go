@@ -13,15 +13,15 @@ import (
 func TestUserService_CreateUser(t *testing.T) {
 	ctrl := gomock.NewController(t)
 
-	repository := mocks.NewMockUserRepository(ctrl)
-	service := NewUserDomainService(repository)
+	mockRepository := mocks.NewMockUserRepository(ctrl)
+	service := NewUserDomainService(mockRepository)
 
 	t.Run("shall_return_user_when_success", func(t *testing.T) {
 		userMock := mocks.UserMock
 
-		repository.EXPECT().FindUserByEmailRepository(userMock.GetEmail()).Return(nil, nil)
+		mockRepository.EXPECT().FindUserByEmailRepository(userMock.GetEmail()).Return(nil, nil)
 
-		repository.EXPECT().CreateUserRepository(userMock).Return(userMock, nil)
+		mockRepository.EXPECT().CreateUserRepository(userMock).Return(userMock, nil)
 
 		response, err := service.CreateUserService(userMock)
 
@@ -34,7 +34,7 @@ func TestUserService_CreateUser(t *testing.T) {
 
 		userMock.SetID(primitive.NewObjectID().Hex())
 
-		repository.EXPECT().FindUserByEmailRepository(userMock.GetEmail()).Return(
+		mockRepository.EXPECT().FindUserByEmailRepository(userMock.GetEmail()).Return(
 			userMock,
 			nil,
 		)
@@ -51,12 +51,12 @@ func TestUserService_CreateUser(t *testing.T) {
 
 		userMock.SetID(primitive.NewObjectID().Hex())
 
-		repository.EXPECT().FindUserByEmailRepository(userMock.GetEmail()).Return(
+		mockRepository.EXPECT().FindUserByEmailRepository(userMock.GetEmail()).Return(
 			nil,
 			nil,
 		)
 
-		repository.EXPECT().CreateUserRepository(userMock).Return(
+		mockRepository.EXPECT().CreateUserRepository(userMock).Return(
 			nil,
 			rest_err.NewInternalServerError("Error creating user"),
 		)
