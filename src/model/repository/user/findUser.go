@@ -35,22 +35,33 @@ func (ur *userRepository) FindUserByIDRepository(id string) (model.UserDomainInt
 	return converter.ConvertEntityToDomain(entity), nil
 }
 
-func (ur *userRepository) FindUserByEmailRepository(email string) (model.UserDomainInterface, *rest_err.RestErr) {
-	logger.Info("Initiating FindUserByEmail repository")
+func (ur *userRepository) FindAllRepository(email string) ([]model.UserDomainInterface, *rest_err.RestErr) {
+	logger.Info("Initiating FindAllUsers repository")
 
 	collection := ur.databaseConnection.Collection(os.Getenv(MONGO_USERS_COLLECTION))
 
-	entity := &entity.UserEntity{}
-
 	filter := bson.D{{Key: "email", Value: email}}
 
-	err := collection.FindOne(context.Background(), filter).Decode(entity)
+	cur, err := collection.Find(context.Background(), filter)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return nil, rest_err.NewNotFoundError("User not found")
+			return nil, rest_err.NewNotFoundError("No users found")
 		}
-		return nil, rest_err.NewInternalServerError("Error finding user by email")
+		return nil, rest_err.NewInternalServerError("Error finding users")
+	}
+	defer cur.Close(context.Background())
+
+	var users []model.UserDomainInterface
+
+	for cur.Next(context.Background()) {
+		entity := &entity.UserEntity{}
+		err := cur.Decode(entity)
+		if err != nil {
+			return nil, rest_err.NewInternalServerError("Error decoding user")
+		}
+
+		users = append(users, converter.ConvertEntityToDomain(entity))
 	}
 
-	return converter.ConvertEntityToDomain(entity), nil
+	return users, nil
 }

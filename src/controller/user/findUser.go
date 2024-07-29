@@ -13,6 +13,25 @@ import (
 	"go.uber.org/zap"
 )
 
+func (uc *userController) FindAllController(c *gin.Context) {
+	logger.Info("Init FindAllUsers controller",
+		zap.String("journey", "findAllUsers"),
+	)
+
+	email := c.Query("userEmail")
+
+	if user, err := uc.service.FindAllUsersService(email); err != nil {
+		c.JSON(err.Code, err)
+		return
+	} else {
+		logger.Info(fmt.Sprintf("User found %v", user),
+			zap.String("method", "FindUserById"),
+		)
+
+		c.JSON(200, view.ConvertDomainToResponse(user))
+	}
+}
+
 func (uc *userController) FindUserByIdController(c *gin.Context) {
 	logger.Info("Init FindUserById controller",
 		zap.String("journey", "findUserById"),

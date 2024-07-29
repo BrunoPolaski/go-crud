@@ -12,11 +12,14 @@ func InitRoutes(
 	r *gin.RouterGroup,
 ) {
 	logger.Info("Setting up routes")
-	r.GET("/getUserById/:userId", middlewares.VerifyTokenMiddleware, controller.FindUserByIdController)
-	r.GET("/getUserByEmail/:userEmail", middlewares.VerifyTokenMiddleware, controller.FindUserByEmailController)
+
+	users := r.Group("/user", middlewares.VerifyTokenMiddleware)
+	users.GET("/", controller.FindUserByIdController)
+	r.GET("/getUserById/:userId", controller.FindUserByIdController)
+	r.GET("/getUserByEmail/:userEmail", controller.FindUserByEmailController)
 
 	r.POST("/createUser", controller.CreateUserController)
-	r.PUT("/updateUser/:userId", middlewares.VerifyTokenMiddleware, controller.UpdateUserController)
-	r.DELETE("/deleteUser/:userId", middlewares.VerifyTokenMiddleware, controller.DeleteUserController)
+	r.PUT("/updateUser/:userId", controller.UpdateUserController)
+	r.DELETE("/deleteUser/:userId", controller.DeleteUserController)
 	r.POST("/login", controller.LoginUserController)
 }
