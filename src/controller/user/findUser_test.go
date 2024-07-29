@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"testing"
 
+	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
 	"github.com/BrunoPolaski/go-crud/src/tests/mocks"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
@@ -44,11 +45,14 @@ func TestUserController_FindUserByEmail(t *testing.T) {
 			},
 		}
 
-		service.EXPECT().FindUserByEmailService("test@test.com").Return()
+		service.EXPECT().FindUserByEmailService("test@test.com").Return(
+			nil,
+			rest_err.NewInternalServerError("Error finding user by email"),
+		)
 
 		mocks.MakeRequest(context, param, url.Values{}, "GET", nil)
 		controller.FindUserByEmailController(context)
 
-		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+		assert.Equal(t, http.StatusInternalServerError, recorder.Code)
 	})
 }
