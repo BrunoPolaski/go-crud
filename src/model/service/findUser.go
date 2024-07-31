@@ -7,8 +7,8 @@ import (
 	"go.uber.org/zap"
 )
 
-func (us *userDomainService) FindAllService(email string) ([]model.UserDomainInterface, *rest_err.RestErr) {
-	logger.Info("Init FindUserByEmail service", zap.String("journey", "findUserByEmail"))
+func (us *userDomainService) FindAllUsersService(email string) ([]model.UserDomainInterface, *rest_err.RestErr) {
+	logger.Info("Init FindAllUsers service", zap.String("journey", "findAllUser"))
 
 	return us.repository.FindAllRepository(email)
 }

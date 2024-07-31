@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestUserController_FindUserByEmail(t *testing.T) {
+func TestUserController_FindAll(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	service := mocks.NewMockUserDomainService(ctrl)
 	controller := NewUserController(service)

@@ -7,9 +7,8 @@ import (
 
 type UserControllerInterface interface {
 	CreateUserController(c *gin.Context)
-	FindAllController(c *gin.Context)
+	FindAllUsersController(c *gin.Context)
 	FindUserByIdController(c *gin.Context)
-	FindUserByEmailController(c *gin.Context)
 	DeleteUserController(c *gin.Context)
 	UpdateUserController(c *gin.Context)
 	LoginUserController(c *gin.Context)

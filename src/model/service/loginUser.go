@@ -10,19 +10,19 @@ import (
 func (us *userDomainService) LoginUserService(userDomain model.UserDomainInterface) (model.UserDomainInterface, string, *rest_err.RestErr) {
 	logger.Info("Init LoginUser service", zap.String("journey", "loginUser"))
 
-	user, err := us.FindUserByEmailService(userDomain.GetEmail())
+	users, err := us.FindAllUsersService(userDomain.GetEmail())
 	if err != nil {
 		return nil, "", err
 	}
 
-	if err := user.ComparePassword(userDomain.GetPassword()); err != nil {
+	if err := users[0].ComparePassword(userDomain.GetPassword()); err != nil {
 		return nil, "", rest_err.NewUnauthorizedError("Invalid credentials")
 	}
 
-	token, err := user.GenerateToken()
+	token, err := users[0].GenerateToken()
 	if err != nil {
 		return nil, "", err
 	}
 
-	return user, token, nil
+	return users[0], token, nil
 }
