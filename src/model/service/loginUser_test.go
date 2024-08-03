@@ -19,7 +19,7 @@ func TestUserService_LoginUser(t *testing.T) {
 		mockUser.EXPECT().GetEmail().Return("email")
 		mockUser.EXPECT().GetPassword().Return("password")
 
-		mockRepository.EXPECT().FindUserByEmailRepository(mockUser.GetEmail()).Return(
+		mockRepository.EXPECT().FindAllRepository(mockUser.GetEmail()).Return(
 			mockUser,
 			nil,
 		)
@@ -47,7 +47,7 @@ func TestUserService_LoginUser(t *testing.T) {
 
 	t.Run("shall_return_error_when_user_not_found", func(t *testing.T) {
 		mockUser.EXPECT().GetEmail().Return("email")
-		mockRepository.EXPECT().FindUserByEmailRepository(mockUser.GetEmail()).Return(
+		mockRepository.EXPECT().FindAllRepository(mockUser.GetEmail()).Return(
 			nil,
 			rest_err.NewNotFoundError("mockUser not found"),
 		)
@@ -64,7 +64,7 @@ func TestUserService_LoginUser(t *testing.T) {
 	t.Run("shall_return_error_when_passwords_mismatch", func(t *testing.T) {
 		mockUser.EXPECT().GetEmail().AnyTimes().Return("email")
 		mockUser.EXPECT().GetPassword().AnyTimes().Return("password")
-		mockRepository.EXPECT().FindUserByEmailRepository("email").Return(
+		mockRepository.EXPECT().FindAllRepository("email").Return(
 			mockUser,
 			nil,
 		)
@@ -84,7 +84,7 @@ func TestUserService_LoginUser(t *testing.T) {
 	t.Run("shall_return_error_when_not_generating_token", func(t *testing.T) {
 		mockUser.EXPECT().GetEmail().AnyTimes().Return("email")
 		mockUser.EXPECT().GetPassword().AnyTimes().Return("password")
-		mockRepository.EXPECT().FindUserByEmailRepository("email").Return(
+		mockRepository.EXPECT().FindAllRepository("email").Return(
 			mockUser,
 			nil,
 		)

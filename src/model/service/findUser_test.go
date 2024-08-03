@@ -18,12 +18,12 @@ func TestUserService_FindUserByEmail(t *testing.T) {
 	t.Run("shall_return_success_when_user_exists", func(t *testing.T) {
 		userDomain := mocks.UserMock
 
-		mockRepository.EXPECT().FindUserByEmailRepository(userDomain.GetEmail()).Return(
+		mockRepository.EXPECT().FindAllRepository(userDomain.GetEmail()).Return(
 			userDomain,
 			nil,
 		)
 
-		response, err := service.FindUserByEmailService(userDomain.GetEmail())
+		response, err := service.FindAllUsersService(userDomain.GetEmail())
 
 		assert.NotNil(t, response)
 		assert.Nil(t, err)
@@ -32,12 +32,12 @@ func TestUserService_FindUserByEmail(t *testing.T) {
 
 	t.Run("shall_return_error_when_user_not_found", func(t *testing.T) {
 
-		mockRepository.EXPECT().FindUserByEmailRepository("test").Return(
+		mockRepository.EXPECT().FindAllRepository("test").Return(
 			nil,
 			rest_err.NewNotFoundError("user not found"),
 		)
 
-		response, err := service.FindUserByEmailService("test")
+		response, err := service.FindAllUsersService("test")
 
 		assert.NotNil(t, err)
 		assert.Nil(t, response)

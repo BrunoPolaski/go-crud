@@ -24,7 +24,7 @@ func (uc *userController) FindAllUsersController(c *gin.Context) {
 		c.JSON(err.Code, err)
 		return
 	} else {
-		logger.Info(fmt.Sprintf("Users found"),
+		logger.Info("Users found",
 			zap.String("method", "FindAllUsers"),
 		)
 

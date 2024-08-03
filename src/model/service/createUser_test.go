@@ -19,7 +19,7 @@ func TestUserService_CreateUser(t *testing.T) {
 	t.Run("shall_return_user_when_success", func(t *testing.T) {
 		userMock := mocks.UserMock
 
-		mockRepository.EXPECT().FindUserByEmailRepository(userMock.GetEmail()).Return(nil, nil)
+		mockRepository.EXPECT().FindAllRepository(userMock.GetEmail()).Return(nil, nil)
 
 		mockRepository.EXPECT().CreateUserRepository(userMock).Return(userMock, nil)
 
@@ -34,7 +34,7 @@ func TestUserService_CreateUser(t *testing.T) {
 
 		userMock.SetID(primitive.NewObjectID().Hex())
 
-		mockRepository.EXPECT().FindUserByEmailRepository(userMock.GetEmail()).Return(
+		mockRepository.EXPECT().FindAllRepository(userMock.GetEmail()).Return(
 			userMock,
 			nil,
 		)
@@ -51,7 +51,7 @@ func TestUserService_CreateUser(t *testing.T) {
 
 		userMock.SetID(primitive.NewObjectID().Hex())
 
-		mockRepository.EXPECT().FindUserByEmailRepository(userMock.GetEmail()).Return(
+		mockRepository.EXPECT().FindAllRepository(userMock.GetEmail()).Return(
 			nil,
 			nil,
 		)

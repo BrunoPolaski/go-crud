@@ -16,10 +16,10 @@ func InitRoutes(
 	users := r.Group("/users").Use(middlewares.VerifyTokenMiddleware)
 	users.GET("/:userId", controller.FindUserByIdController)
 	users.GET("/", controller.FindAllUsersController)
-	users.POST("/", controller.CreateUserController)
 	users.PUT("/:userId", controller.UpdateUserController)
 	users.DELETE("/:userId", controller.DeleteUserController)
 
+	r.POST("/", controller.CreateUserController)
 	auth := r.Group("/auth")
 	auth.POST("/login", controller.LoginUserController)
 }

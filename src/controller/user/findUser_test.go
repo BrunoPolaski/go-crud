@@ -29,7 +29,7 @@ func TestUserController_FindAll(t *testing.T) {
 		}
 
 		mocks.MakeRequest(context, param, url.Values{}, "GET", nil)
-		controller.FindUserByEmailController(context)
+		controller.FindAllUsersController(context)
 
 		assert.Equal(t, http.StatusBadRequest, recorder.Code)
 	})
@@ -45,13 +45,13 @@ func TestUserController_FindAll(t *testing.T) {
 			},
 		}
 
-		service.EXPECT().FindUserByEmailService("test@test.com").Return(
+		service.EXPECT().FindAllUsersService("test@test.com").Return(
 			nil,
 			rest_err.NewInternalServerError("Error finding user by email"),
 		)
 
 		mocks.MakeRequest(context, param, url.Values{}, "GET", nil)
-		controller.FindUserByEmailController(context)
+		controller.FindAllUsersController(context)
 
 		assert.Equal(t, http.StatusInternalServerError, recorder.Code)
 	})
