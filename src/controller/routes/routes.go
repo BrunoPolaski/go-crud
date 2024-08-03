@@ -13,13 +13,13 @@ func InitRoutes(
 ) {
 	logger.Info("Setting up routes")
 
-	users := r.Group("/users").Use(middlewares.VerifyTokenMiddleware)
-	users.GET("/:userId", controller.FindUserByIdController)
-	users.GET("/", controller.FindAllUsersController)
-	users.PUT("/:userId", controller.UpdateUserController)
-	users.DELETE("/:userId", controller.DeleteUserController)
+	users := r.Group("/users")
+	users.POST("/", middlewares.ApiKeyAuth, controller.CreateUserController)
+	users.GET("/", middlewares.BearerAuth, controller.FindAllUsersController)
+	users.GET("/:userId", middlewares.BearerAuth, controller.FindUserByIdController)
+	users.PUT("/:userId", middlewares.BearerAuth, controller.UpdateUserController)
+	users.DELETE("/:userId", middlewares.BearerAuth, controller.DeleteUserController)
 
-	r.POST("/", controller.CreateUserController)
 	auth := r.Group("/auth")
-	auth.POST("/login", controller.LoginUserController)
+	auth.POST("/login", middlewares.ApiKeyAuth, controller.LoginUserController)
 }

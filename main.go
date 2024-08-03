@@ -17,6 +17,8 @@ func main() {
 
 	godotenv.Load()
 
+	mongodb.Migrate()
+
 	database, err := mongodb.NewMongoConnection(context.Background())
 	if err != nil {
 		log.Fatal(err)

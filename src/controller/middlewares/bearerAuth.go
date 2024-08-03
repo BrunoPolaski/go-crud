@@ -9,7 +9,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func VerifyTokenMiddleware(c *gin.Context) {
+func BearerAuth(c *gin.Context) {
 	secret := os.Getenv("JWT_SECRET")
 	tokenValue := model.RemoveBearerPrefix(c.Request.Header.Get("Authorization"))
 	token, err := jwt.Parse(tokenValue, func(token *jwt.Token) (interface{}, error) {
