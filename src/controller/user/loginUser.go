@@ -4,23 +4,22 @@ import (
 	"net/http"
 
 	"github.com/BrunoPolaski/go-crud/src/configuration/logger"
-	"github.com/BrunoPolaski/go-crud/src/configuration/validation"
+	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
 	"github.com/BrunoPolaski/go-crud/src/controller/model/request"
 	model "github.com/BrunoPolaski/go-crud/src/model/user"
-	"github.com/BrunoPolaski/go-crud/src/view"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
 func (uc *userController) LoginUserController(c *gin.Context) {
 	var userLogin request.UserLogin
+	var ok bool
 
-	if err := c.ShouldBindJSON(&userLogin); err != nil {
-		logger.Error("Invalid JSON body", err,
-			zap.String("journey", "loginUser"),
-		)
-		errorMessage := validation.ValidateUserError(err)
-		c.JSON(errorMessage.Code, errorMessage)
+	userLogin.Email, userLogin.Password, ok = c.Request.BasicAuth()
+	if !ok {
+		err := rest_err.NewBadRequestError("Invalid basic auth")
+		logger.Error("Error parsing basic auth", err)
+		c.JSON(err.Code, err)
 		return
 	}
 
@@ -40,6 +39,8 @@ func (uc *userController) LoginUserController(c *gin.Context) {
 		zap.String("journey", "loginUser"),
 	)
 
-	c.Header("Authorization", token)
-	c.JSON(http.StatusOK, view.ConvertDomainToResponse(domain))
+	c.JSON(http.StatusOK, gin.H{
+		"accessToken": token,
+		"user":        domain.GetID(),
+	})
 }

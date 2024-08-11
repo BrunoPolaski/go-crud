@@ -47,18 +47,13 @@ curl --json '{
 	"name": "John",
 	"age": 22,
 	"password": "Chewbacca@777"
-}' localhost:8080/createUser
+}' localhost:8080/user
 ```
 
 And log in the server with:
 
 ```bash
-curl --json '{
-	"email": "test@gmail.com",
-	"name": "John",
-	"age": 22,
-	"password": "Chewbacca@777"
-}' localhost:8080/login
+curl -u <username>:<password> localhost:8080/auth/login
 ```
 
 ### Testing

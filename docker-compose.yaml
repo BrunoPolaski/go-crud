@@ -7,9 +7,11 @@ services:
       dockerfile: Dockerfile
     environment:
       MONGO_URL: ${MONGO_URL}
+      MONGO_USERNAME: ${MONGO_USERNAME}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
       MONGO_USERS_DATABASE: ${MONGO_USERS_DATABASE}
-      JWT_SECRET: ${JWT_SECRET}
       MONGO_USERS_COLLECTION: ${MONGO_USERS_COLLECTION}
+      JWT_SECRET: ${JWT_SECRET}
     ports:
       - "8080:8080"
     depends_on:

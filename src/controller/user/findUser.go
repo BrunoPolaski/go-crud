@@ -39,7 +39,7 @@ func (uc *userController) FindUserByIdController(c *gin.Context) {
 			zap.String("method", "FindUserById"),
 		)
 
-		c.JSON(200, view.ConvertDomainToResponse(user))
+		c.JSON(http.StatusOK, view.ConvertDomainToResponse(user))
 	}
 }
 
@@ -65,6 +65,6 @@ func (uc *userController) FindUserByEmailController(c *gin.Context) {
 			zap.String("method", "FindUserByEmail"),
 		)
 
-		c.JSON(http.StatusFound, view.ConvertDomainToResponse(user))
+		c.JSON(http.StatusOK, view.ConvertDomainToResponse(user))
 	}
 }
