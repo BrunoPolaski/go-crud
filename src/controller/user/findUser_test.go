@@ -90,6 +90,7 @@ func TestUserController_FindUserByID(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	service := mocks.NewMockUserDomainService(ctrl)
 	controller := NewUserController(service)
+
 	t.Run("shall_return_error_when_id_is_incorrect", func(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		context := mocks.GetTestGinContext(recorder)

@@ -27,8 +27,10 @@ func (uc *userController) UpdateUserController(c *gin.Context) {
 			zap.String("journey", "updateUser"),
 		)
 		c.JSON(http.StatusBadRequest, rest_err.NewBadRequestError("Invalid ID"))
+		return
 	}
 
+	logger.Info("Validating user info")
 	if err := c.ShouldBindJSON(&userUpdateRequest); err != nil {
 		logger.Error("Error trying to validate user info", err,
 			zap.String("journey", "updateUser"))
